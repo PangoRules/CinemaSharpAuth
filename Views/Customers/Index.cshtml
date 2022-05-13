@@ -1,0 +1,30 @@
+﻿@model IEnumerable<CinemaSharpAuth.Models.Customer>
+
+@{
+    ViewBag.Title = "Customers Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Customers</h2>
+@if(Model.Any())
+{
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Customer</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var customer in Model)
+            {
+                <tr class="table-dark">
+                    <th scope="row"><a href=/customers/details/@customer.Id>@customer.Name</a></th>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No customers available at the current moment.</p>
+}
