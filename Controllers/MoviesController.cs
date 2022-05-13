@@ -1,6 +1,7 @@
 ﻿using CinemaSharpAuth.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -9,6 +10,28 @@ namespace CinemaSharpAuth.Controllers
 {
     public class MoviesController : Controller
     {
+        /// <summary>
+        /// Variable that helps query the database (MUST BE INITIALIZED IN CONSTRUCTOR)
+        /// </summary>
+        private ApplicationDbContext _context;
+
+        /// <summary>
+        /// Constructor to initialize varaibles
+        /// </summary>
+        public MoviesController()
+        {
+            _context = new ApplicationDbContext();
+        }
+
+        /// <summary>
+        /// This is a method of Controller class, in this case it is used to dispose de context from the database
+        /// </summary>
+        /// <param name="disposing">bool: Indicase whether or no t to dispose the _context variable</param>
+        protected override void Dispose(bool disposing)
+        {
+            _context.Dispose();
+        }
+
         // GET : Movies
         /// <summary>
         /// Function that returns the view with the current movies
@@ -16,22 +39,26 @@ namespace CinemaSharpAuth.Controllers
         /// <returns>ViewResult: Views/Movies/Index.cshtml</returns>
         public ViewResult Index()
         {
-            var movies = GetMovies();
+            var movies = _context.Movies.Include(c => c.Genre).ToList();
 
             return View(movies);
         }
 
+        //GET: Movies/details/{id}
         /// <summary>
-        /// Current function to create movies list
+        /// Function that returns the view with the selected movie according to it's id
         /// </summary>
-        /// <returns>IEnumerable: Enumerable list with the current movies to show in table</returns>
-        private IEnumerable<Movie> GetMovies()
+        /// <param name="id">int: Movie identifier</param>
+        /// <returns>View: -View/Movies/Details.cshtml</returns>
+        [Route("movies/details/{id:int}")]
+        public ViewResult Details(int id)
         {
-            return new List<Movie>
-            {
-                new Movie{Id = 1, Name = "Shrek 1"},
-                new Movie{Id = 1, Name = "Shrek 2"},
-            };
+            var movie = _context.Movies.Include(c => c.Genre).FirstOrDefault(c => c.Id == id);
+
+            if(movie == null)
+                throw new HttpException(404, "Not found");
+
+            return View(movie);
         }
 
         #region[PRUEBAS COMENTADAS]

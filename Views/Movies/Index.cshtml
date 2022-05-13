@@ -10,14 +10,16 @@
     <table class="table table-bordered table-hover">
         <thead>
             <tr>
-                <th scope="col">Movies</th>
+                <th scope="col">Name</th>
+                <th>Genre</th>
             </tr>
         </thead>
         <tbody>
             @foreach(var movie in Model)
             {
                 <tr class="table-dark">
-                    <th scope="row">@movie.Name</th>
+                    <th scope="row"><a href=/movies/details/@movie.Id>@movie.Name</a></th>
+                    <th>@movie.Genre.Name</th>
                 </tr>
             }
         </tbody>
