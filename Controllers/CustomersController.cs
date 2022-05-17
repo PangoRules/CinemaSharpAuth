@@ -119,8 +119,22 @@ namespace CinemaSharpAuth.Controllers
         /// <param name="customer">Customer: Model with the data of the new customer</param>
         /// <returns>RedirectToRouteResult: Redirects to Index()</returns>
         [HttpPost]
-        public RedirectToRouteResult Save(Customer customer)
+        [ValidateAntiForgeryToken]
+        public ActionResult Save(Customer customer)
         {
+            #region[Validating Model]
+            if(!ModelState.IsValid)
+            {
+                var viewModel = new CustomerFormViewModel
+                {
+                    Customer = customer,
+                    MembershipTypes = _context.MembershipTypes.ToList()
+                };
+
+                return View("CustomerForm", viewModel);
+            }
+            #endregion
+
             if(customer.Id == 0)
                 _context.Customers.Add(customer);
             else

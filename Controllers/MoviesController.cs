@@ -115,8 +115,22 @@ namespace CinemaSharpAuth.Controllers
         /// <param name="movie">Movie: ViewModel with the data to add or update a movie in the database</param>
         /// <returns>RedirectToAction: MoviesControler.Index()</returns>
         [HttpPost]
-        public RedirectToRouteResult Save(Movie movie)
+        [ValidateAntiForgeryToken]
+        public ActionResult Save(Movie movie)
         {
+            #region[Validations]
+            if(!ModelState.IsValid)
+            {
+                var viewModel = new MovieFormViewModel
+                {
+                    Movie = movie,
+                    Genre = _context.Genres.ToList()
+                };
+
+                return View("MoviesForm", viewModel);
+            }
+            #endregion
+
             if(movie.Id == 0)
                 _context.Movies.Add(movie);
             else
