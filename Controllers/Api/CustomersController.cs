@@ -3,6 +3,7 @@ using CinemaSharpAuth.Dto;
 using CinemaSharpAuth.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -43,7 +44,10 @@ namespace CinemaSharpAuth.Controllers.Api
         /// <returns>IHttpActionResult: List of customers</returns>
         public IHttpActionResult GetCustomers()
         {
-            IEnumerable<CustomerDto> customersList = _context.Customers.ToList().Select(Mapper.Map<Customer, CustomerDto>);
+            IEnumerable<CustomerDto> customersList = _context.Customers
+                                                     .Include(c => c.MembershipType)
+                                                     .ToList()
+                                                     .Select(Mapper.Map<Customer, CustomerDto>);
 
             return Ok(customersList);
         }

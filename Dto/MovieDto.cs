@@ -26,5 +26,7 @@ namespace CinemaSharpAuth.Dto
         [Required]
         [Range(1,99, ErrorMessage = "Stock value must be between 1 and 99")]
         public byte NumberInStock { get; set; }
+
+        public GenreDto Genre { get; set; }
     }
 }

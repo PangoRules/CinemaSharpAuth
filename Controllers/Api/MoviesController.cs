@@ -3,6 +3,7 @@ using CinemaSharpAuth.Dto;
 using CinemaSharpAuth.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -43,7 +44,10 @@ namespace CinemaSharpAuth.Controllers.Api
         /// <returns>IHttpActionResult: List of movies</returns>
         public IHttpActionResult GetMovies()
         {
-            IEnumerable<MovieDto> moviesList = _context.Movies.ToList().Select(Mapper.Map<Movie, MovieDto>);
+            IEnumerable<MovieDto> moviesList = _context.Movies
+                                               .Include(c => c.Genre)
+                                               .ToList()
+                                               .Select(Mapper.Map<Movie, MovieDto>);
 
             return Ok(moviesList);
         }

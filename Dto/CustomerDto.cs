@@ -17,6 +17,8 @@ namespace CinemaSharpAuth.Dto
 
         public bool IsSubscribedToNewsLetter { get; set; }
 
+        public MembershipTypeDto MembershipType { get; set; }
+
         [Required(ErrorMessage = "Please select a valid Membership Type.")]
         public byte MembershipTypeId { get; set; }
 

@@ -43,9 +43,7 @@ namespace CinemaSharpAuth.Controllers
         /// <returns>ViewResult: Views/Movies/Index.cshtml</returns>
         public ViewResult Index()
         {
-            var movies = _context.Movies.Include(c => c.Genre).ToList();
-
-            return View(movies);
+            return View();
         }
 
         //GET: Movies/details/{id}

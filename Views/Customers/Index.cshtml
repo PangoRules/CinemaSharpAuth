@@ -1,6 +1,4 @@
-﻿@model IEnumerable<CinemaSharpAuth.Models.Customer>
-
-@{
+﻿@{
     ViewBag.Title = "Customers Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -9,29 +7,87 @@
 <p>
 	@Html.ActionLink("New Customer", "New", "Customers", null, new { @class = "btn btn-primary" })
 </p>
-@if(Model.Count()>0)
-{
-    <table class="table table-bordered table-hover">
-        <thead>
-            <tr>
-                <th scope="col">Customer</th>
-                <th>Membership Type</th>
-                <th>Discount Rate</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach(var customer in Model)
-            {
-                <tr class="table-dark">
-                    <th scope="row"><a href=/customers/edit/@customer.Id>@customer.Name</a></th>
-                    <th>@customer.MembershipType.Name</th>
-                    <th>@customer.MembershipType.DiscountRate%</th>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
-else
-{
-    <p>No customers available at the current moment.</p>
+<table id="customers" class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th scope="col">Customer</th>
+            <th>Membership Type</th>
+            <th>Discount Rate</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+	<tbody>
+		@*
+		@foreach(var customer in Model)
+		{
+			<tr class="table-dark">
+				<th scope="row"><a href=/customers/edit/@customer.Id>@customer.Name</a></th>
+				<th>@customer.MembershipType.Name</th>
+				<th>@customer.MembershipType.DiscountRate%</th>
+				<th>
+					<button data-customer-id="@customer.Id" class="btn-link js-delete">Delete</button>
+				</th>
+			</tr>
+		}
+		*@
+	</tbody>
+</table>
+
+
+@section scripts{
+	<script>
+        $(document).ready(function () {
+            //Initializing datatable in a variable
+            var table = $("#customers").DataTable({
+                //Ajax call to get list of customers from de API
+                ajax: {
+                    url: "/api/customers",
+                    dataSrc: ""
+                },
+                //Custom columns to render in data table
+                columns: [
+                    //Name column
+                    {
+                        data: "name",
+                        render: function (data, type, row) {
+                            return "<a href='/customers/edit/" + row.id + "'>" + row.name + "</a>";
+						}
+                    },
+                    //MembershipType.Name column
+                    {
+                        data: "membershipType.name",
+                    },
+                    //MembershipType.DiscountRate column
+					{
+						data: "membershipType.discountRate"
+                    },
+                    //Actions column
+                    {
+                        data: "id",
+                        render: function (data, type, row) {
+                            return "<button data-customer-id=" +row.id +" class='btn-link js-delete'>Delete</button>"
+						}
+					}
+                ]
+            });
+
+			$("#customers").on("click", ".js-delete", function () {
+                var button = $(this);
+
+                bootbox.confirm("Are you sure you want to delete this customer?", function (result) {
+                    if (result) {
+						$.ajax({
+							url: "/api/customers/" + button.attr("data-customer-id"),
+							method: "DELETE",
+                            success: function () {
+                                //Use without datatable
+                                /*button.parents("tr").remove();*/
+                                table.row(button.parents("tr")).remove().draw();
+							},
+						});
+					}
+                });
+            });
+        });
+	</script>
 }

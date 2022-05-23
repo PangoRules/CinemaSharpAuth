@@ -47,9 +47,7 @@ namespace CinemaSharpAuth.Controllers
         /// <returns>ViewResult: Customers/Index.cshtml</returns>
         public ViewResult Index()
         {
-            var customers = _context.Customers.Include(c => c.MembershipType).ToList();
-
-            return View(customers);
+            return View();
         }
 
         // GET: Customers/Details/{id}
