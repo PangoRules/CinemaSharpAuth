@@ -54,9 +54,9 @@ namespace CinemaSharpAuth
             //   consumerKey: "",
             //   consumerSecret: "");
 
-            //app.UseFacebookAuthentication(
-            //   appId: "",
-            //   appSecret: "");
+            app.UseFacebookAuthentication(
+               appId: "354606900069913",
+               appSecret: "dd9120c55848623fad31196b818cbc1a");
 
             //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
             //{

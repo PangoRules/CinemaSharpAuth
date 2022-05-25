@@ -43,7 +43,10 @@ namespace CinemaSharpAuth.Controllers
         /// <returns>ViewResult: Views/Movies/Index.cshtml</returns>
         public ViewResult Index()
         {
-            return View();
+            if(User.IsInRole(RoleName.CanManageMovies))
+                return View();
+            else
+                return View("IndexRO");
         }
 
         //GET: Movies/details/{id}
@@ -68,6 +71,7 @@ namespace CinemaSharpAuth.Controllers
         /// Function that returns the view with the form to create a new movie
         /// </summary>
         /// <returns>View: ~/Views/Movies/MovieForm.cshtml</returns>
+        [Authorize(Roles = RoleName.CanManageMovies)]
         public ViewResult New()
         {
             var genres = _context.Genres.ToList();
@@ -88,6 +92,7 @@ namespace CinemaSharpAuth.Controllers
         /// <param name="id">int: Identifier of the movie to edit.</param>
         /// <returns>View: ~/Views/Movies/MovieForm.cshtml</returns>
         [Route("Movies/Edit/{id:int}")]
+        [Authorize(Roles = RoleName.CanManageMovies)]
         public ViewResult Edit(int id)
         {
             var movie = _context.Movies.SingleOrDefault(c => c.Id == id);
@@ -114,6 +119,7 @@ namespace CinemaSharpAuth.Controllers
         /// <returns>RedirectToAction: MoviesControler.Index()</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = RoleName.CanManageMovies)]
         public ActionResult Save(Movie movie)
         {
             #region[Validations]

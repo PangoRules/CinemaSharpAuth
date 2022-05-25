@@ -77,6 +77,7 @@ namespace CinemaSharpAuth.Controllers.Api
         /// <param name="newMovieDto">MovieDto: Model with the data of the new movie to create</param>
         /// <returns>IHttpActionResult: Movie model with the url to the new created movie</returns>
         [HttpPost]
+        [Authorize(Roles = RoleName.CanManageMovies)]
         public IHttpActionResult CreateMovie(MovieDto newMovieDto)
         {
             #region[Validating Model]
@@ -105,6 +106,7 @@ namespace CinemaSharpAuth.Controllers.Api
         /// <param name="movieDto">MovieDto: Model with the new data of the movie.</param>
         /// <returns>IHttpActionResult: Ok message if movie was updated correctly.</returns>
         [HttpPut]
+        [Authorize(Roles = RoleName.CanManageMovies)]
         public IHttpActionResult UpdateMovie(int id, MovieDto movieDto)
         {
             #region[Validating Model]
@@ -132,6 +134,8 @@ namespace CinemaSharpAuth.Controllers.Api
         /// </summary>
         /// <param name="id">int: id of the movie to delete.</param>
         /// <returns>IHttpActionResult: Ok message if movie deleted succesfully</returns>
+        [HttpDelete]
+        [Authorize(Roles = RoleName.CanManageMovies)]
         public IHttpActionResult DeleteMovie(int id)
         {
             #region[Validating Model]
