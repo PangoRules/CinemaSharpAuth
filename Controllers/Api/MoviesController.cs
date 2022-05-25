@@ -42,12 +42,14 @@ namespace CinemaSharpAuth.Controllers.Api
         /// Function that returns the list of movies on the server
         /// </summary>
         /// <returns>IHttpActionResult: List of movies</returns>
-        public IHttpActionResult GetMovies()
+        public IHttpActionResult GetMovies(string query = null)
         {
-            IEnumerable<MovieDto> moviesList = _context.Movies
-                                               .Include(c => c.Genre)
-                                               .ToList()
-                                               .Select(Mapper.Map<Movie, MovieDto>);
+            var moviesQuery = _context.Movies.Include(c => c.Genre).Where(m => m.NumberAvailable > 0);
+
+            if(!String.IsNullOrWhiteSpace(query))
+                moviesQuery = moviesQuery.Where(c => c.Name.Contains(query));
+
+            var moviesList = moviesQuery.ToList().Select(Mapper.Map<Movie, MovieDto>);
 
             return Ok(moviesList);
         }

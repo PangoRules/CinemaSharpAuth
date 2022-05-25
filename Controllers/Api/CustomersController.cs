@@ -42,12 +42,14 @@ namespace CinemaSharpAuth.Controllers.Api
         /// Function that gets the list of current customers in the database
         /// </summary>
         /// <returns>IHttpActionResult: List of customers</returns>
-        public IHttpActionResult GetCustomers()
+        public IHttpActionResult GetCustomers(string query = null)
         {
-            IEnumerable<CustomerDto> customersList = _context.Customers
-                                                     .Include(c => c.MembershipType)
-                                                     .ToList()
-                                                     .Select(Mapper.Map<Customer, CustomerDto>);
+            var customersQuery = _context.Customers.Include(c => c.MembershipType);
+
+            if(!String.IsNullOrWhiteSpace(query))
+                customersQuery = customersQuery.Where(c => c.Name.Contains(query));
+
+            var customersList = customersQuery.ToList().Select(Mapper.Map<Customer, CustomerDto>);
 
             return Ok(customersList);
         }

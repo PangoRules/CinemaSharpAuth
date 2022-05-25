@@ -22,6 +22,8 @@ namespace CinemaSharpAuth.App_Start
             Mapper.CreateMap<MovieDto, Movie>().ForMember(c => c.Id, opt => opt.Ignore());
             //Mapping for genre Dto's
             Mapper.CreateMap<Genre, GenreDto>();
+            //Mapping for rental Dto's
+            Mapper.CreateMap<Rental, NewRentalDto>();
         }
     }
 }

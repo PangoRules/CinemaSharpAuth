@@ -33,5 +33,7 @@ namespace CinemaSharpAuth.Models
         [Range(1,99, ErrorMessage = "Stock value must be between 1 and 99")]
         [Display(Name = "Stock")]
         public byte NumberInStock { get; set; }
+
+        public byte NumberAvailable { get; set; }
     }
 }

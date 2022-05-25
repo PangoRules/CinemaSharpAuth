@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Runtime.Caching;
 using System.Web;
 using System.Web.Mvc;
 
@@ -47,6 +48,11 @@ namespace CinemaSharpAuth.Controllers
         /// <returns>ViewResult: Customers/Index.cshtml</returns>
         public ViewResult Index()
         {
+            //if(MemoryCache.Default["Genres"] == null)
+            //    MemoryCache.Default["Genres"] = _context.Genres.ToList();
+
+            //var genres = (IEnumerable<Genre>) MemoryCache.Default["Genres"];
+
             return View();
         }
 
